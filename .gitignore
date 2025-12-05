@@ -1,0 +1,14 @@
+# Virtual environment
+.venv/
+venv/
+.vscode/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# System files
+.DS_Store
+
+# Hugging Face local cache
+*.ckpt
