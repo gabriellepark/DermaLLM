@@ -3,6 +3,15 @@
 venv/
 .vscode/
 
+# Data files
+data/
+*.csv
+*.tsv
+*.parquet
+*.feather
+*.xlsx
+*.xls
+
 # Python cache
 __pycache__/
 *.pyc
