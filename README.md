@@ -24,7 +24,7 @@ The global beauty market is a multi-billion dollar industry, with skincare accou
 To address this challenge, we developed SkinWise. ** Our goal is to bridge the gap between complex skincare information and user-friendly recommendations by allowing users to ask questions and receive custom, easy-to-understand responses.**
 
 
-
+# TO EDIT
 ## Architecture
 
 The SkinWise workflow brings together rich skincare product and medical data and a powerful AI agent to meet users' individual needs:
