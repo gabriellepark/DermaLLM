@@ -1,0 +1,446 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaLLM</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 👈 key change */
+            min-height: 100vh;       /* 👈 instead of height */
+            margin: 0;
+            padding: 2rem 0;        /* 👈 breathing room */
+        }
+
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 520px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            resize: vertical;
+            font-family: inherit;
+            box-sizing: border-box;
+            min-height: 100px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        button.primary:hover {
+            background-color: #0056b3;
+        }
+
+        button.secondary {
+            background-color: #e9ecef;
+        }
+
+        button.secondary:hover {
+            background-color: #d6d8db;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.75rem 0;
+        }
+
+        .examples button {
+            font-size: 0.75rem;
+            padding: 6px 8px;
+            background: #f1f3f5;
+            border-radius: 999px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            margin-top: 0.75rem;
+            display: none;
+        }
+
+        #response-area {
+            margin-top: 1.25rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+            display: none;
+        }
+
+        .error {
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>DermaLLM</h1>
+
+    <p class="hint">
+        Enter skin concerns, conditions, or products. Results are informational only.
+    </p>
+
+    <div class="examples">
+        <button type="button" onclick="fillExample('Recommend products for dry, sensitive skin')">
+            Dry & Sensitive
+        </button>
+        <button type="button" onclick="fillExample('Best anti-aging skincare routine for fine lines')">
+            Anti-Aging
+        </button>
+        <button type="button" onclick="fillExample('Best routine for acne-prone oily skin')">
+            Acne
+        </button>
+    </div>
+
+
+    <form id="prompt-form">
+        <textarea
+            id="prompt"
+            placeholder="Ask a skincare question..."
+            required
+        ></textarea>
+
+        <div class="actions">
+            <button class="primary" type="submit" id="submit-btn">
+                Generate
+            </button>
+            <button class="secondary" type="button" onclick="clearAll()">
+                Clear
+            </button>
+        </div>
+    </form>
+
+    <div class="loading" id="loader">Thinking…</div>
+    <div id="response-area"></div>
+</div>
+
+<script>
+    const form = document.getElementById('prompt-form');
+    const promptInput = document.getElementById('prompt');
+    const responseArea = document.getElementById('response-area');
+    const loader = document.getElementById('loader');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await sendPrompt();
+    });
+
+    function fillExample(text) {
+        promptInput.value = text;
+        promptInput.focus();
+    }
+
+    function clearAll() {
+        promptInput.value = '';
+        responseArea.style.display = 'none';
+        responseArea.textContent = '';
+    }
+
+    async function sendPrompt() {
+        const prompt = promptInput.value.trim();
+        if (!prompt) return;
+
+        submitBtn.disabled = true;
+        loader.style.display = 'block';
+        responseArea.style.display = 'none';
+        responseArea.classList.remove('error');
+
+        try {
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            });
+
+            if (!res.ok) {
+                throw new Error(`Server error (${res.status})`);
+            }
+
+            const data = await res.json();
+            responseArea.textContent = data.response || 'No response returned.';
+            responseArea.style.display = 'block';
+            responseArea.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (err) {
+            responseArea.textContent = 'Error: ' + err.message;
+            responseArea.classList.add('error');
+            responseArea.style.display = 'block';
+        } finally {
+            loader.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DermaLLM</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .animate-bounce-1 { animation: bounce 1s infinite; }
+        .animate-bounce-2 { animation: bounce 1s infinite 0.2s; }
+        .animate-bounce-3 { animation: bounce 1s infinite 0.4s; }
+    </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useRef, useEffect } = React;
+
+/* ---------------- Message Bubble ---------------- */
+function ChatMessage({ message, isBot }) {
+    return (
+        <div className={`flex ${isBot ? "justify-start" : "justify-end"} mb-4`}>
+            <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap
+                ${isBot
+                    ? "bg-blue-50 border border-blue-100 text-gray-900"
+                    : "bg-blue-600 text-white"
+                }`}>
+                {message}
+            </div>
+        </div>
+    );
+}
+
+/* ---------------- Main App ---------------- */
+function App() {
+    const [messages, setMessages] = useState([
+        {
+            id: 1,
+            text: "Hi! I'm DermaLLM. Describe your skin concerns and I’ll recommend skincare products.",
+            isBot: true,
+        }
+    ]);
+    const [input, setInput] = useState("");
+    const [isTyping, setIsTyping] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    async function sendMessage(text) {
+        if (!text.trim()) return;
+
+        const userMessage = {
+            id: messages.length + 1,
+            text,
+            isBot: false
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+        setInput("");
+        setIsTyping(true);
+
+        try {
+            const res = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: text })
+            });
+
+            if (!res.ok) {
+                throw new Error(`Server error (${res.status})`);
+            }
+
+            const data = await res.json();
+
+            setMessages(prev => [
+                ...prev,
+                {
+                    id: prev.length + 1,
+                    text: data.response || "No response returned.",
+                    isBot: true
+                }
+            ]);
+
+        } catch (err) {
+            setMessages(prev => [
+                ...prev,
+                {
+                    id: prev.length + 1,
+                    text: `Error: ${err.message}`,
+                    isBot: true
+                }
+            ]);
+        } finally {
+            setIsTyping(false);
+        }
+    }
+
+    const quickQuestions = [
+        "I have acne breakouts",
+        "My skin is very dry",
+        "Anti-aging routine",
+        "Sensitive skin recommendations"
+    ];
+
+    return (
+        <div className="w-screen h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
+            <div className="w-full max-w-4xl h-full max-h-[800px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden m-4">
+
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-5">
+                    <h1 className="text-2xl font-bold">DermaLLM</h1>
+                    <p className="text-blue-100 text-sm">
+                        AI-powered skincare recommendations
+                    </p>
+                </div>
+
+                {/* Messages */}
+                <div className="messages-container flex-1 overflow-y-auto px-6 py-6">
+                    {messages.map(m => (
+                        <ChatMessage key={m.id} message={m.text} isBot={m.isBot} />
+                    ))}
+
+                    {isTyping && (
+                        <div className="flex justify-start mb-4">
+                            <div className="bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3 flex gap-1">
+                                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce-1"></div>
+                                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce-2"></div>
+                                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce-3"></div>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef}></div>
+                </div>
+
+                {/* Quick Questions */}
+                {messages.length === 1 && (
+                    <div className="px-6 pb-4">
+                        <p className="text-sm text-gray-600 mb-2">Try one:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {quickQuestions.map((q, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => sendMessage(q)}
+                                    className="px-4 py-2 border rounded-full text-sm hover:bg-blue-50"
+                                >
+                                    {q}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Input */}
+                <div className="border-t bg-gray-50 p-6">
+                    <div className="flex gap-3">
+                        <input
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={e => {
+                                if (e.key === "Enter") sendMessage(input);
+                            }}
+                            placeholder="Describe your skin concerns..."
+                            className="flex-1 px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
+                        />
+                        <button
+                            onClick={() => sendMessage(input)}
+                            disabled={!input.trim()}
+                            className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50"
+                        >
+                            Send
+                        </button>
+                    </div>
+                    <p className="text-xs text-gray-500 text-center mt-2">
+                        Educational only — not medical advice
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
