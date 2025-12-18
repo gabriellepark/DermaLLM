@@ -1,5 +1,7 @@
 # SkinWise
-## Contributors: [Gabriella Chu](https://github.com/gaby-chu), [Yelene Cisse](https://github.com/ymciss0), [Gabrielle Park](https://github.com/gabriellepark), [Kshamaa Suresh](https://github.com/KshamaaS)
+### Contributors: [Gabriella Chu](https://github.com/gaby-chu), [Yelene Cisse](https://github.com/ymciss0), [Gabrielle Park](https://github.com/gabriellepark), [Kshamaa Suresh](https://github.com/KshamaaS)
+
+## Overview:
 
 SkinWise is an AI-powered skincare assistant that combines product metadata, reviews, and medical knowledge to deliver personalized recommendations to users.
 
