@@ -37,28 +37,62 @@ TO EDIT
 ## Architecture
 
 The SkinWise workflow brings together rich skincare product and medical data and a powerful AI agent to meet users' individual needs:
+# Project Workflow
 
-1. **Data Input:** 
-2. **Data Analysis:** 
-3. **Model Training:** 
-4. **Model Evaluation:**
-5. **UI Interface:**
-6. **Deployment:**
+1. **Data Input**
+   - **Data Ingestion:** Import raw data from sources (CSV, SQL, APIs).
+   - **Data Validation:** Check schema consistency and data types.
+   - **Data Versioning:** Snapshot data for reproducibility.
 
-### File Structure
+2. **Data Analysis**
+   - **Exploratory Data Analysis (EDA):** Visualize distributions and correlations.
+   - **Data Cleaning:** Handle missing values, duplicates, and formatting errors.
+   - **Feature Engineering:** Scale features, encode variables, and create new features.
 
-| Item                                | Schedule                         |
-|-------------------------------------|----------------------------------|
-| [Instructor Notes](completed_module/logistics/032020_EARS6_InstructorNotes.docx)| Read in preparation |
-| Construct calibration stations      | Before term                      |
-| [Pre-project questionairre and instructions](completed_module/components/032020_EARS6_StudentInstructions.docx)| Beginning of the term            |
-| [Create google sheets for each group](completed_module/components/032020_EARS6_ExampleDataStructure.xlsx) | Before data collection           |
-| Measure shoe at calibration station | As needed throughout the term    |
-| Measure and record incidence angle  | Daily                            |
-| Preliminary data and hypothesis ([Example results](completed_module/components/032020_EARS6_ExampleDataStructure.xlsx))     | Due determined by feedback cycle |
-| Final project report                | End of term                      |
-| Video Abstract                      | End of term                      |
-| Reflections                         | End of term                      |
+3. **Model Training**
+   - **Data Splitting:** Divide into training, validation, and testing sets.
+   - **Algorithm Selection:** Choose baselines and complex models.
+   - **Hyperparameter Tuning:** Optimize model configurations (Grid/Random Search).
+
+4. **Model Evaluation**
+   - **Performance Metrics:** Calculate Accuracy, F1-Score, RMSE, etc.
+   - **Error Analysis:** Review confusion matrices and residual plots.
+   - **Cross-Validation:** Verify generalization using k-fold validation.
+
+5. **UI Interface**
+   - **Frontend Design:** Build user inputs using frameworks (Streamlit, Flask).
+   - **Backend Integration:** Connect frontend to model prediction APIs.
+   - **Visualization:** Display predictions and probability scores clearly.
+
+6. **Deployment**
+   - **Containerization:** Package application with Docker.
+   - **Hosting:** Deploy to cloud providers (AWS, GCP, Azure).
+   - **Monitoring:** Track performance and detect data drift.
+
+
+### Directory Structure
+
+
+```text
+├── app
+│   ├── css
+│   │   ├── **/*.css
+│   ├── favicon.ico
+│   ├── images
+│   ├── index.html
+│   ├── js
+│   │   ├── **/*.js
+│   └── partials/template
+├── dist (or build)
+├── node_modules
+├── bower_components (if using bower)
+├── test
+├── Gruntfile.js/gulpfile.js
+├── README.md
+├── package.json
+├── bower.json (if using bower)
+└── .gitignore
+
 
 
 ## Dependencies
