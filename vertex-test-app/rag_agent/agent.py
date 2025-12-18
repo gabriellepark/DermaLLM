@@ -35,8 +35,9 @@ class SkincareAgent:
     def __init__(self):
         # Load Embeddings
         # (We silence the warning by knowing it works, even if deprecated)
+
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="BAAI/bge-base-en-v1.5",
+            model_name="BAAI/bge-large-en-v1.5", # <--- Change to "large"
             model_kwargs={'device': 'cpu'},
             encode_kwargs={'normalize_embeddings': True}
         )
@@ -44,10 +45,10 @@ class SkincareAgent:
         # Load Vector Store
         self.vectorstore = FAISS.load_local("faiss_index", self.embeddings, allow_dangerous_deserialization=True)
 
-        # --- MAJOR UPDATE HERE ---
-        # 1. Use ChatVertexAI (Better for Gemini)
-        # 2. Increase tokens to 2048 (Prevents cutoff)
-        # 3. Add explicit safety settings to stop "Medical" blocks
+        # Switching to 2.5 because it works better w/ Gemini and is updated version
+
+
+
         self.llm = ChatVertexAI(
             model_name="gemini-2.5-flash",
             temperature=0.3,

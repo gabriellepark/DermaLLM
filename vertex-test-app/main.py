@@ -3,54 +3,120 @@ from rag_agent.agent import SkincareAgent
 import vertexai
 import os
 import logging
+import traceback
+import time
 
-# Setup logging so we can see errors in Cloud Console
-logging.basicConfig(level=logging.INFO)
+# ------------------ Logging ------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
 
 app = Flask(__name__)
 
-# Initialize Vertex AI
-PROJECT_ID = "skin-care-recommender"
-vertexai.init(project=PROJECT_ID, location="us-central1")
+# ------------------ Initialize Agent ------------------
+agent = None
 
-# --- CRITICAL FIX: Load Agent Here ---
-# This forces the model to load when the container starts,
-# not when the user clicks the button.
-print("Initializing SkincareAgent... this may take a minute.")
-try:
-    agent = SkincareAgent()
-    print("SkincareAgent initialized successfully!")
-except Exception as e:
-    print(f"CRITICAL ERROR initializing agent: {e}")
-    agent = None
-# -------------------------------------
+def init_agent():
+    """
+    Initializes Vertex AI + SkincareAgent.
+    """
+    global agent
+
+    if agent is not None:
+        logging.info("Agent already initialized — skipping")
+        return
+
+    try:
+        logging.info("Starting agent initialization")
+
+        PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
+
+        if PROJECT_ID:
+            logging.info(f"Using explicit PROJECT_ID={PROJECT_ID}")
+            vertexai.init(
+                project=PROJECT_ID,
+                location="us-central1"
+            )
+        else:
+            logging.info(
+                "GOOGLE_CLOUD_PROJECT not set — using Cloud Run default credentials"
+            )
+            vertexai.init(location="us-central1")
+
+        agent = SkincareAgent()
+
+        logging.info("✅ SkincareAgent initialized successfully")
+
+    except Exception as e:
+        logging.error("🔥 AGENT INITIALIZATION FAILED")
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+        agent = None
+
+# Initialize once at container startup
+init_agent()
+# ------------------------------------------------
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
+
 @app.route("/chat", methods=["POST"])
 def chat():
-    # Check if agent failed to load at startup
-    if agent is None:
-        return jsonify({"response": "Server Error: The AI model failed to load. Check server logs."}), 500
-
     try:
-        data = request.json
-        user_prompt = data.get("prompt", "")
+        logging.info("=== /chat called ===")
 
-        if not user_prompt:
-            return jsonify({"response": "Please ask a question."})
+        data = request.get_json(silent=True)
+        logging.info(f"Raw JSON payload: {data}")
 
-        # Generate answer
-        logging.info(f"Processing request: {user_prompt}")
+        if not data or "prompt" not in data:
+            return jsonify({"error": "Expected JSON: { 'prompt': '...' }"}), 400
+
+        user_prompt = data["prompt"]
+
+        if not isinstance(user_prompt, str) or not user_prompt.strip():
+            return jsonify({"error": "Prompt must be a non-empty string"}), 400
+
+
+        if agent is None:
+            logging.warning("Agent not initialized — retrying init")
+            init_agent()
+
+        if agent is None:
+            return jsonify({
+                "error": "Agent failed to initialize. Check server logs."
+            }), 500
+
+        logging.info("Calling agent.get_response()")
+        start = time.time()
+
         response_text = agent.get_response(user_prompt)
-        
+
+        logging.info(f"Response time: {time.time() - start:.2f}s")
+
+        if response_text is None:
+            return jsonify({"error": "Agent returned empty response"}), 500
+
         return jsonify({"response": response_text})
 
     except Exception as e:
-        logging.error(f"Error generating response: {e}")
-        return jsonify({"response": "Sorry, I had a glitch. Please try again."}), 500
+        logging.error("ERROR IN /chat")
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@app.route("/health")
+def health():
+    return jsonify({
+        "agent_loaded": agent is not None,
+        "agent_type": str(type(agent)),
+        "project_env": os.getenv("GOOGLE_CLOUD_PROJECT"),
+    })
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080)

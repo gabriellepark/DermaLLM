@@ -1,7 +1,8 @@
 import vertexai
 from vertexai.generative_models import GenerativeModel
 
-# Try to initialize with your ID
+# Test file
+# Initializing with project ID
 vertexai.init(project="skin-care-recommender", location="us-central1")
 try:
     print("Attempting to talk to Gemini...")

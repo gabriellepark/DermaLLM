@@ -3,11 +3,10 @@ import time
 import pandas as pd
 import vertexai
 
-# 1. Setup Environment
-# Ensure you are authenticated with Google Cloud
+# 1. Initialize Environment
 vertexai.init(project="skin-care-recommender", location="us-central1")
 
-# 2. Import your Agent
+# 2. Import RAG Agent
 try:
     from rag_agent.agent import SkincareAgent
     print("Initializing Agent for Testing...")
@@ -20,9 +19,7 @@ except Exception as e:
     print("and that 'faiss_index' exists.")
     exit()
 
-# ==========================================
-# PASTE YOUR TEST CODE BELOW THIS LINE
-# ==========================================
+
 
 def test_efficiency():
     """Test response speed across different query types"""
