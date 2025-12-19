@@ -1,4 +1,4 @@
-# 🫧SkinWise🫧
+# 🫧SkinWise
 ### Contributors: 🧼[Gabriella Chu](https://github.com/gaby-chu), 🛍️[Yelene Cisse](https://github.com/ymciss0), 🧬[Gabrielle Park](https://github.com/gabriellepark), 🧴[Kshamaa Suresh](https://github.com/KshamaaS)
 
 ## Overview:
