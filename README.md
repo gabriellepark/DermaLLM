@@ -68,7 +68,7 @@ The SkinWise workflow brings together rich skincare product and medical data and
 
 ## Getting Started
 
-[Ask SkinWise your skincare-related questions!](https://huggingface.co/spaces/kshamaasuresh/skincare-agent))
+[Ask SkinWise your skincare-related questions!](https://huggingface.co/spaces/kshamaasuresh/skincare-agent)
 
 
 ## Limitations and Future Directions
