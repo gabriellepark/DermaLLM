@@ -5,7 +5,7 @@
 
 SkinWise is an AI-powered skincare assistant that combines product metadata, reviews, and medical knowledge to deliver personalized recommendations to users.
 
-<img src="src/docs/images/skinwise.png" alt="SkinWise Landing Page" height="400">
+[SkinWise In Action!](src/docs/images/demo.gif)
 
 *Home page for SkinWise where users can input skincare-related questions*
 
